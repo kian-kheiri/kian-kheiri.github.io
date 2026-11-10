@@ -19,7 +19,6 @@
             padding-top: 30px;
         }
 
-        /* --- ظرف اصلی نوبار (شیشه‌ای) --- */
         #glass-navbar {
             display: flex;
             justify-content: space-between;
@@ -36,7 +35,6 @@
             padding: 0 25px;
         }
 
-        /* --- بخش لوگو (سمت چپ) --- */
         .brand {
             display: flex;
             align-items: center;
@@ -63,7 +61,6 @@
             font-size: 16px;
         }
 
-        /* --- بخش لینک‌های منو (وسط) --- */
         .nav-links {
             display: flex;
             list-style: none;
@@ -78,16 +75,14 @@
             padding: 8px 16px;
             border-radius: 20px;
             transition: all 0.3s ease;
-            border: 1px solid transparent; /* برای جلوگیری از پرش صفحه موقع هاور */
+            border: 1px solid transparent;
         }
 
-        /* افکت هاور (وقتی موس روی لینک میره) */
         .nav-links > li > a:hover {
             color: white;
             background: rgba(255, 255, 255, 0.08);
         }
 
-        /* --- دکمه فعال (Home) --- */
         .nav-links > li > a.active {
             color: white;
             background: rgba(37, 99, 235, 0.15);
@@ -95,7 +90,6 @@
             box-shadow: 0 0 15px rgba(37, 99, 235, 0.2);
         }
 
-        /* --- دکمه جستجو (سمت راست) --- */
         .icon-btn {
             background: transparent;
             border: none;
@@ -110,19 +104,28 @@
         .icon-btn:hover {
             color: white;
         }
+        
+        /* اینجا علامت { اضافه شد */
+        @media (max-width: 800px) {
+            #glass-navbar {
+                width: 95%; 
+                padding: 0 15px;
+            }
+
+            .nav-links {
+                display: none; 
+            }
+        }
     </style>
 </head>
 <body>
     <header>
         <nav id="glass-navbar">
-            
-            <!-- بخش لوگو -->
             <div class="brand">
                 <div class="logo-icon">K</div>
                 <span class="brand-name">Kian Kheiri</span>
             </div>
 
-            <!-- بخش لینک‌ها (به Home کلاس active دادیم) -->
             <ul class="nav-links">
                 <li><a href="#" class="active">Home</a></li>
                 <li><a href="#">Projects</a></li>
@@ -131,7 +134,6 @@
                 <li><a href="#">About</a></li>
             </ul>
 
-            <!-- بخش دکمه جستجو با آیکون SVG -->
             <div>
                 <button class="icon-btn" aria-label="Search">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -140,7 +142,6 @@
                     </svg>
                 </button>
             </div>
-
         </nav>
     </header>
 </body>
