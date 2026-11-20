@@ -3,442 +3,432 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BLACKBOX | Ultimate Security Lab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLACKBOX V2</title>
 <style>
-:root{
- --bg:#090d14;--panel:#111927;--panel2:#172235;
- --line:#26364d;--blue:#3988ff;--cyan:#43d9ff;
- --green:#35d69a;--red:#ff596b;--text:#e5edf8;
- --muted:#8293aa;
+:root {
+  --bg:#080d16; --panel:#111b2b; --line:#26364c;
+  --blue:#3b82f6; --green:#22c55e; --text:#e5edf8;
+  --muted:#91a2ba; --red:#ef4444;
 }
 *{box-sizing:border-box}
 body{
- margin:0;background:var(--bg);color:var(--text);
- font-family:Consolas,monospace;
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Arial,sans-serif;min-height:100vh;
 }
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-.layout{display:flex;min-height:100vh}
-.sidebar{
- width:240px;background:#0c131e;border-right:1px solid var(--line);
- padding:22px 15px;flex-shrink:0;
+button,input,select{font:inherit}
+button{
+  cursor:pointer;border:0;border-radius:8px;padding:11px 15px;
+  background:var(--blue);color:white;font-weight:bold;
 }
-.logo{font-size:23px;font-weight:bold;letter-spacing:4px;color:var(--blue)}
-.logo small{display:block;font-size:9px;color:var(--muted);letter-spacing:2px;margin-top:5px}
-.nav{margin-top:35px}
-.nav button{
- width:100%;text-align:left;padding:13px 12px;margin:3px 0;
- background:transparent;color:var(--muted);border:0;border-radius:6px;
+button:hover{filter:brightness(1.15)}
+input,select{
+  width:100%;padding:12px;margin:7px 0 14px;
+  background:#080f1c;color:white;border:1px solid var(--line);
+  border-radius:8px;outline:none;
 }
-.nav button:hover,.nav button.active{background:#172943;color:#fff}
-.side-status{margin-top:40px;border:1px solid var(--line);padding:12px;border-radius:7px;font-size:11px;line-height:2}
-.dot{color:var(--green)}
-.main{flex:1;min-width:0;padding:25px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:20px}
-h1{font-size:20px;margin:0}
-.muted{color:var(--muted);font-size:12px}
-.user{color:var(--cyan);font-size:12px}
-.page{display:none;padding-top:25px}
-.page.active{display:block}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
-.card{
- background:var(--panel);border:1px solid var(--line);
- border-radius:9px;padding:17px;
-}
-.card h3{font-size:13px;margin:0 0 12px}
-.big{font-size:27px;color:var(--cyan)}
-.small{font-size:11px;color:var(--muted)}
-.section-title{margin:27px 0 14px;font-size:14px}
-.btn{
- background:var(--blue);color:white;border:0;border-radius:5px;
- padding:10px 14px;font-size:12px;
-}
-.btn.secondary{background:#24344b}
-.btn.danger{background:#6e2937}
-.btn.green{background:#176b50}
-input,textarea,select{
- width:100%;background:#080e17;border:1px solid var(--line);
- color:var(--text);padding:11px;border-radius:5px;outline:none;
- margin:7px 0 13px;
-}
-textarea{min-height:110px;resize:vertical}
-label{font-size:11px;color:var(--muted)}
-pre{
- white-space:pre-wrap;overflow-wrap:anywhere;
- background:#080e17;padding:14px;border:1px solid var(--line);
- border-radius:6px;color:#a9c8e8;font-size:12px;line-height:1.7;
-}
-.challenge{display:flex;flex-direction:column;gap:12px}
-.tag{font-size:10px;color:var(--cyan)}
-.status{font-size:11px;color:var(--green)}
-.notice{padding:12px;border-left:3px solid var(--blue);background:#142239;font-size:12px;line-height:1.7;margin:15px 0}
+input:focus,select:focus{border-color:var(--blue)}
+label{font-size:13px;color:var(--muted)}
+h1,h2,h3{margin-top:0}
+small,.muted{color:var(--muted)}
 .hidden{display:none!important}
-#loginScreen{
- position:fixed;inset:0;background:#080d15;z-index:10;
- display:flex;align-items:center;justify-content:center;padding:20px;
+.container{width:min(1100px,94%);margin:auto}
+header{
+  border-bottom:1px solid var(--line);padding:18px 0;
+  display:flex;justify-content:space-between;align-items:center;
 }
-.loginbox{width:100%;max-width:390px;background:var(--panel);border:1px solid var(--line);padding:28px;border-radius:10px}
-.loginbox h1{text-align:center;color:var(--blue);letter-spacing:5px;font-size:27px}
-.loginbox .muted{text-align:center;margin:10px 0 25px}
-#message{font-size:12px;min-height:18px}
-.logline{border-bottom:1px solid var(--line);padding:10px 0;font-size:11px;color:var(--muted)}
-.flag{color:var(--green);font-weight:bold}
-footer{margin-top:35px;border-top:1px solid var(--line);padding-top:15px;color:var(--muted);font-size:10px}
-@media(max-width:700px){
- .layout{display:block}
- .sidebar{width:100%;border-right:0;border-bottom:1px solid var(--line)}
- .nav{display:grid;grid-template-columns:repeat(2,1fr);margin-top:15px}
- .side-status{margin-top:15px}
- .main{padding:18px}
+.logo{font-weight:900;letter-spacing:4px;color:var(--blue)}
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:13px;padding:20px;margin:15px 0;
 }
+.login-wrap{max-width:390px;margin:10vh auto}
+.login-wrap .card{padding:28px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:#0c1523;border:1px solid var(--line);padding:17px;border-radius:10px}
+.stat strong{font-size:25px;display:block;margin-top:8px}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.nav button{background:#18263a}
+.nav button.active{background:var(--blue)}
+.green-panel{
+  border:1px solid #168344;background:#0c2419;
+  border-radius:13px;padding:20px;margin:15px 0;
+}
+.green-panel h2{color:#4ade80}
+.green-btn{background:#15803d}
+.danger{background:#991b1b}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--muted)}
+.table-wrap{overflow-x:auto}
+.tag{
+  display:inline-block;padding:5px 9px;border-radius:20px;
+  background:#1c2d43;font-size:11px
+}
+.tag.admin{background:#392b12;color:#facc15}
+.tag.superadmin{background:#123b2a;color:#4ade80}
+.message{min-height:20px;color:#fca5a5;font-size:13px}
+footer{text-align:center;color:var(--muted);padding:35px 0;font-size:12px}
 </style>
 </head>
 <body>
 
-<div id="loginScreen">
- <div class="loginbox">
-  <h1>BLACKBOX</h1>
-  <div class="muted">ULTIMATE SECURITY TRAINING LAB</div>
-  <div class="status">● LAB INSTANCE ONLINE</div>
-  <label>USERNAME</label>
-  <input id="loginUser" placeholder="Enter username" autocomplete="off">
-  <label>PASSWORD</label>
-  <input id="loginPass" type="password" placeholder="Enter password">
-  <button class="btn" style="width:100%" onclick="login()">AUTHENTICATE</button>
-  <p id="message"></p>
-  <div class="muted">Training environment · Fictional accounts</div>
- </div>
+<div id="loginScreen" class="login-wrap">
+  <div class="card">
+    <div class="logo">BLACKBOX</div>
+    <p class="muted">V2 / ACCESS CONTROL LAB</p>
+    <h2>Authentication</h2>
+    <label>USERNAME</label>
+    <input id="loginUser" autocomplete="username" placeholder="Enter username">
+    <label>PASSWORD</label>
+    <input id="loginPass" type="password" autocomplete="current-password" placeholder="Enter password">
+    <button style="width:100%" onclick="login()">AUTHENTICATE</button>
+    <p id="loginMessage" class="message"></p>
+    <small>Educational client-side simulator</small>
+  </div>
 </div>
 
-<div class="layout">
-<aside class="sidebar">
- <div class="logo">BLACKBOX<small>SECURITY LAB v1.0</small></div>
- <div class="nav">
-  <button class="active" onclick="showPage('home',this)">▣ Dashboard</button>
-  <button onclick="showPage('missions',this)">⌘ Missions</button>
-  <button onclick="showPage('http',this)">⇄ HTTP Simulator</button>
-  <button onclick="showPage('database',this)">▤ JSON Database</button>
-  <button onclick="showPage('logs',this)">◷ Activity Logs</button>
-  <button onclick="showPage('about',this)">ⓘ About Lab</button>
- </div>
- <div class="side-status">
-  SYSTEM <span class="dot">● ONLINE</span><br>
-  MODE: LOCAL SIMULATION<br>
-  NETWORK: ISOLATED<br>
-  VERSION: 1.0.0
- </div>
-</aside>
+<div id="app" class="hidden">
+  <header class="container">
+    <div>
+      <div class="logo">BLACKBOX V2</div>
+      <small>SECURITY TRAINING ENVIRONMENT</small>
+    </div>
+    <div class="btn-row">
+      <span id="identity" class="muted"></span>
+      <button class="danger" onclick="logout()">Logout</button>
+    </div>
+  </header>
 
-<main class="main">
- <header class="top">
-  <div>
-   <h1 id="pageTitle">Dashboard</h1>
-   <div class="muted">BLACKBOX / TRAINING ENVIRONMENT</div>
-  </div>
-  <div class="user">USER: <span id="currentUser">GUEST</span></div>
- </header>
+  <main class="container">
+    <div class="card">
+      <h2 id="welcome">Dashboard</h2>
+      <p class="muted">Welcome to the BLACKBOX training environment.</p>
+      <div class="stats">
+        <div class="stat">TOTAL USERS<strong id="totalUsers">0</strong></div>
+        <div class="stat">ADMINS<strong id="totalAdmins">0</strong></div>
+        <div class="stat">YOUR ROLE<strong id="myRole">USER</strong></div>
+      </div>
+    </div>
 
- <section id="home" class="page active">
-  <div class="notice">
-   Welcome to BLACKBOX. This environment contains fictional services and
-   simulated security weaknesses for learning application security.
-  </div>
-  <div class="grid">
-   <div class="card"><div class="small">LAB STATUS</div><div class="big">ONLINE</div></div>
-   <div class="card"><div class="small">MISSIONS COMPLETED</div><div class="big" id="completed">0 / 4</div></div>
-   <div class="card"><div class="small">TOTAL SCORE</div><div class="big" id="score">0</div></div>
-   <div class="card"><div class="small">ACTIVITY EVENTS</div><div class="big" id="eventCount">0</div></div>
-  </div>
-  <h2 class="section-title">LAB SERVICES</h2>
-  <div class="grid">
-   <div class="card"><h3>Authentication Service</h3><span class="status">● Running</span></div>
-   <div class="card"><h3>HTTP Simulator</h3><span class="status">● Running</span></div>
-   <div class="card"><h3>JSON Data Store</h3><span class="status">● Running</span></div>
-  </div>
-  <h2 class="section-title">QUICK ACTIONS</h2>
-  <button class="btn" onclick="showPage('missions')">Open Missions</button>
-  <button class="btn secondary" onclick="showPage('http')">HTTP Simulator</button>
- </section>
+    <div class="nav">
+      <button class="active" onclick="showTab('home',this)">Dashboard</button>
+      <button onclick="showTab('missions',this)">Missions</button>
+      <button id="managementNav" class="hidden" onclick="showTab('management',this)">User Management</button>
+    </div>
 
- <section id="missions" class="page">
-  <div class="notice">Complete the educational challenges. Each mission uses a fictional, isolated application model.</div>
-  <div class="grid" id="missionList"></div>
- </section>
+    <section id="homeTab">
+      <div class="card">
+        <h2>System Overview</h2>
+        <p class="muted">BLACKBOX is running in local simulation mode.</p>
+        <p>Current session: <strong id="sessionRole"></strong></p>
+        <p>Access level: <strong id="accessLevel"></strong></p>
+      </div>
+      <div class="card">
+        <h3>Security Notice</h3>
+        <p class="muted">This application stores accounts in browser storage. It is not a production authentication system.</p>
+      </div>
+    </section>
 
- <section id="http" class="page">
-  <div class="notice">This tool simulates HTTP messages. It does not send requests to external servers.</div>
-  <div class="card">
-   <label>HTTP METHOD</label>
-   <select id="method"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option></select>
-   <label>SIMULATED PATH</label>
-   <input id="path" value="/api/profile">
-   <label>REQUEST BODY</label>
-   <textarea id="body" placeholder='{"user":"guest"}'></textarea>
-   <button class="btn" onclick="sendRequest()">SEND SIMULATED REQUEST</button>
-   <h3 class="section-title">RESPONSE</h3>
-   <pre id="response">Waiting for request...</pre>
-  </div>
- </section>
+    <section id="missionsTab" class="hidden">
+      <div class="card">
+        <h2>Training Missions</h2>
+        <div class="card">
+          <h3>01 — Source Code Analysis</h3>
+          <p class="muted">Understand what information is exposed in client-side code.</p>
+          <span class="tag">BEGINNER</span>
+        </div>
+        <div class="card">
+          <h3>02 — Authentication Review</h3>
+          <p class="muted">Study how a browser-based login simulation works.</p>
+          <span class="tag">BEGINNER</span>
+        </div>
+        <div class="card">
+          <h3>03 — Access Control</h3>
+          <p class="muted">Understand the difference between User, Admin and Super Admin.</p>
+          <span class="tag">INTERMEDIATE</span>
+        </div>
+      </div>
+    </section>
 
- <section id="database" class="page">
-  <div class="notice">Fictional training records. This JSON store exists only in browser memory.</div>
-  <div class="card">
-   <h3>DATABASE PREVIEW</h3>
-   <pre id="dbView"></pre>
-   <button class="btn secondary" onclick="renderDatabase()">Refresh Preview</button>
-  </div>
- </section>
+    <section id="managementTab" class="hidden">
+      <div class="green-panel">
+        <h2>USER MANAGEMENT CENTER</h2>
+        <p class="muted">Create accounts and manage access levels.</p>
 
- <section id="logs" class="page">
-  <div class="card">
-   <h3>EVENT HISTORY</h3>
-   <div id="logList">No events yet.</div>
-   <button class="btn danger" onclick="clearLogs()">Clear Logs</button>
-  </div>
- </section>
+        <label>USERNAME</label>
+        <input id="newUsername" placeholder="New username">
 
- <section id="about" class="page">
-  <div class="card">
-   <h3>ABOUT BLACKBOX</h3>
-   <p class="muted" style="line-height:2">
-    BLACKBOX is a browser-based cybersecurity learning simulator.
-    It provides fictional examples of common web security concepts.
-   </p>
-   <p class="muted">No external targets are contacted. No real credentials are stored.</p>
-   <button class="btn danger" onclick="resetLab()">RESET LAB</button>
-  </div>
- </section>
+        <label>PASSWORD</label>
+        <input id="newPassword" type="password" placeholder="New password">
 
- <footer>BLACKBOX LAB · EDUCATIONAL SIMULATOR · DO NOT USE REAL PASSWORDS</footer>
-</main>
+        <label>ACCOUNT ROLE</label>
+        <select id="newRole">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+          <option value="superadmin" id="superOption">Super Admin</option>
+        </select>
+
+        <button class="green-btn" onclick="createAccount()">+ CREATE ACCOUNT</button>
+        <p id="createMessage" class="message"></p>
+      </div>
+
+      <div class="card">
+        <h2>Account Directory</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>USERNAME</th><th>ROLE</th><th>ACTION</th></tr>
+            </thead>
+            <tbody id="userTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>BLACKBOX V2 · EDUCATIONAL SIMULATOR · NO REAL BACKEND</footer>
 </div>
 
 <script>
-// ===================================
-// BLACKBOX - FICTIONAL JSON DATABASE
-// ===================================
+/*
+  BLACKBOX V2
+  IMPORTANT:
+  This is a client-side learning simulation.
+  Never use these credentials or this access-control model
+  for a real website.
+*/
 
-const DB = {
- users: [
-  {id:1,username:"analyst",password:"bluebox-2026",role:"user"},
-  {id:2,username:"operator",password:"operator-demo",role:"admin"}
- ],
- profiles: [
-  {id:1,name:"Alex Morgan",role:"Analyst",department:"Security"},
-  {id:2,name:"Sam Carter",role:"Administrator",department:"IT"}
- ],
- missions: [
-  {id:1,title:"Authentication Review",category:"AUTH",description:"Study how a fictional login system validates a user. Identify the design weakness described in the scenario.",question:"The training login accepts a user identity but does not verify the matching secret. What security property is missing?",answer:"password verification",points:100},
-  {id:2,title:"Input Validation",category:"INPUT",description:"A fictional comment service displays user input. Compare unsafe rendering with safe text rendering.",question:"Which browser API treats supplied content as plain text instead of parsing it as HTML?",answer:"textcontent",points:100},
-  {id:3,title:"Access Control",category:"ACCESS",description:"A demo profile service returns account information. The user role is not checked before the simulated response.",question:"What security principle requires checking permissions for every protected resource?",answer:"authorization",points:100},
-  {id:4,title:"SQL Injection Concepts",category:"DATABASE",description:"Study a fictional query builder. The vulnerable design combines user input with query text. The secure design uses parameterized queries.",question:"What is the standard defense against SQL injection in database queries?",answer:"parameterized queries",points:150}
- ],
- events: [],
- completed: [],
- score:0
+// Initial Super Admin account for the training lab.
+// These values are intentionally stored in client-side code.
+const ROOT_ACCOUNT = {
+  username: "nexus-chief-01",
+  password: "BBX-V2_ROOT!9x-K7",
+  role: "superadmin"
 };
 
-let activeUser=null;
+const STORAGE_KEY = "blackbox_v2_users";
 
-function logEvent(text){
- DB.events.unshift({
-  text,
-  time:new Date().toLocaleTimeString()
- });
- DB.events=DB.events.slice(0,50);
- updateStats();
- renderLogs();
+function loadUsers(){
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if(saved){
+      const parsed = JSON.parse(saved);
+      if(Array.isArray(parsed)) return parsed;
+    }
+  } catch(e){}
+  return [
+    {id:1,username:"analyst",password:"bluebox-2026",role:"user"},
+    {id:2,username:"operator",password:"operator-demo",role:"admin"},
+    {...ROOT_ACCOUNT,id:3}
+  ];
+}
+
+let users = loadUsers();
+let currentUser = null;
+
+function saveUsers(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(users));
+}
+
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,char=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  }[char]));
 }
 
 function login(){
- const u=document.getElementById("loginUser").value.trim();
- const p=document.getElementById("loginPass").value;
- const account=DB.users.find(x=>x.username===u&&x.password===p);
- const message=document.getElementById("message");
+  const username = document.getElementById("loginUser").value.trim();
+  const password = document.getElementById("loginPass").value;
 
- if(!account){
-  message.style.color="var(--red)";
-  message.textContent="ACCESS DENIED";
-  logEvent("Failed login attempt");
-  return;
- }
+  const account = users.find(u =>
+    u.username === username && u.password === password
+  );
 
- activeUser=account;
- document.getElementById("currentUser").textContent=account.username.toUpperCase();
- document.getElementById("loginScreen").classList.add("hidden");
- message.textContent="";
- logEvent("Successful login: "+account.username);
- renderDatabase();
- renderMissions();
-}
-
-function showPage(id,button){
- document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
- document.getElementById(id).classList.add("active");
- document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
- if(button)button.classList.add("active");
- const titles={
-  home:"Dashboard",missions:"Training Missions",
-  http:"HTTP Simulator",database:"JSON Database",
-  logs:"Activity Logs",about:"About BLACKBOX"
- };
- document.getElementById("pageTitle").textContent=titles[id];
- if(id==="database")renderDatabase();
- if(id==="missions")renderMissions();
- if(id==="logs")renderLogs();
-}
-
-function renderMissions(){
- const list=document.getElementById("missionList");
- list.innerHTML="";
- DB.missions.forEach(m=>{
-  const done=DB.completed.includes(m.id);
-  const card=document.createElement("div");
-  card.className="card challenge";
-
-  const title=document.createElement("h3");
-  title.textContent=m.title;
-  const tag=document.createElement("div");
-  tag.className="tag";
-  tag.textContent=m.category+" · "+m.points+" POINTS";
-  const desc=document.createElement("p");
-  desc.className="muted";
-  desc.textContent=m.description;
-  const btn=document.createElement("button");
-  btn.className="btn "+(done?"green":"");
-  btn.textContent=done?"COMPLETED":"OPEN MISSION";
-  btn.disabled=done;
-  btn.onclick=()=>openMission(m.id);
-
-  card.append(tag,title,desc,btn);
-  list.appendChild(card);
- });
-}
-
-function openMission(id){
- const m=DB.missions.find(x=>x.id===id);
- if(!m)return;
- const answer=prompt(m.title+"\n\n"+m.description+"\n\n"+m.question);
- if(answer===null)return;
-
- if(answer.trim().toLowerCase()===m.answer){
-  if(!DB.completed.includes(id)){
-   DB.completed.push(id);
-   DB.score+=m.points;
-   logEvent("Mission completed: "+m.title);
-   alert("CORRECT! FLAG: BLACKBOX{MISSION_"+id+"_COMPLETE}");
+  if(!account){
+    document.getElementById("loginMessage").textContent =
+      "Invalid username or password.";
+    return;
   }
- }else{
-  logEvent("Incorrect answer in mission: "+m.title);
-  alert("Not quite. Review the scenario and try again.");
- }
- renderMissions();
- updateStats();
+
+  currentUser = account;
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  renderDashboard();
 }
 
-function sendRequest(){
- const method=document.getElementById("method").value;
- const path=document.getElementById("path").value;
- const body=document.getElementById("body").value;
- let result;
+function logout(){
+  currentUser = null;
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("loginScreen").classList.remove("hidden");
+  document.getElementById("loginPass").value = "";
+  document.getElementById("loginMessage").textContent = "";
+}
 
- if(path==="/api/profile"&&method==="GET"){
-  result={
-   status:200,
-   message:"Simulated response",
-   data:DB.profiles[0]
+function renderDashboard(){
+  if(!currentUser) return;
+
+  document.getElementById("identity").textContent =
+    currentUser.username;
+  document.getElementById("welcome").textContent =
+    "Welcome, " + currentUser.username;
+  document.getElementById("myRole").textContent =
+    currentUser.role.toUpperCase();
+  document.getElementById("sessionRole").textContent =
+    currentUser.role.toUpperCase();
+
+  const access = {
+    user:"Standard access",
+    admin:"User management",
+    superadmin:"Full lab management"
   };
- }else if(path==="/api/users"&&method==="GET"){
-  result={
-   status:200,
-   message:"Training data",
-   data:DB.users.map(u=>({id:u.id,username:u.username,role:u.role}))
-  };
- }else if(path==="/api/profile"&&method==="POST"){
-  result={
-   status:200,
-   message:"Profile update simulation",
-   received:body
-  };
- }else{
-  result={
-   status:404,
-   error:"Simulated endpoint not found",
-   path
-  };
- }
+  document.getElementById("accessLevel").textContent =
+    access[currentUser.role] || "Unknown";
 
- document.getElementById("response").textContent=
-  "HTTP/1.1 "+result.status+"\n"+
-  "Content-Type: application/json\n"+
-  "X-Lab: BLACKBOX\n\n"+
-  JSON.stringify(result,null,2);
+  document.getElementById("totalUsers").textContent = users.length;
+  document.getElementById("totalAdmins").textContent =
+    users.filter(u=>u.role==="admin" || u.role==="superadmin").length;
 
- logEvent("HTTP simulation: "+method+" "+path);
+  const canManage = currentUser.role === "admin" ||
+                    currentUser.role === "superadmin";
+
+  document.getElementById("managementNav")
+    .classList.toggle("hidden",!canManage);
+
+  // Only Super Admin can create or assign Super Admin accounts.
+  document.getElementById("superOption")
+    .disabled = currentUser.role !== "superadmin";
+
+  if(canManage) renderUsers();
 }
 
-function renderDatabase(){
- document.getElementById("dbView").textContent=
-  JSON.stringify({
-   users:DB.users.map(u=>({
-    id:u.id,username:u.username,role:u.role
-   })),
-   profiles:DB.profiles,
-   missions:DB.missions.map(m=>({
-    id:m.id,title:m.title,category:m.category
-   }))
-  },null,2);
+function showTab(name,button){
+  ["home","missions","management"].forEach(tab=>{
+    document.getElementById(tab+"Tab").classList.add("hidden");
+  });
+
+  if(name==="management" &&
+     currentUser.role!=="admin" &&
+     currentUser.role!=="superadmin"){
+    return;
+  }
+
+  document.getElementById(name+"Tab").classList.remove("hidden");
+
+  document.querySelectorAll(".nav button")
+    .forEach(btn=>btn.classList.remove("active"));
+
+  if(button) button.classList.add("active");
+  if(name==="management") renderUsers();
 }
 
-function renderLogs(){
- const box=document.getElementById("logList");
- if(!DB.events.length){
-  box.textContent="No events yet.";
-  return;
- }
- box.innerHTML="";
- DB.events.forEach(e=>{
-  const line=document.createElement("div");
-  line.className="logline";
-  line.textContent="["+e.time+"] "+e.text;
-  box.appendChild(line);
- });
+function createAccount(){
+  const username = document.getElementById("newUsername").value.trim();
+  const password = document.getElementById("newPassword").value;
+  const role = document.getElementById("newRole").value;
+  const message = document.getElementById("createMessage");
+
+  if(!username || !password){
+    message.textContent = "Username and password are required.";
+    return;
+  }
+
+  if(username.length < 3 || password.length < 6){
+    message.textContent = "Username needs 3+ characters; password needs 6+.";
+    return;
+  }
+
+  if(users.some(u=>u.username.toLowerCase()===username.toLowerCase())){
+    message.textContent = "This username already exists.";
+    return;
+  }
+
+  if(role==="superadmin" && currentUser.role!=="superadmin"){
+    message.textContent = "Only Super Admin can create Super Admin accounts.";
+    return;
+  }
+
+  if(currentUser.role==="admin" && role!=="user"){
+    message.textContent = "Admins can create User accounts only.";
+    return;
+  }
+
+  users.push({
+    id:Math.max(0,...users.map(u=>Number(u.id)||0))+1,
+    username,password,role
+  });
+
+  saveUsers();
+  renderDashboard();
+  renderUsers();
+
+  document.getElementById("newUsername").value = "";
+  document.getElementById("newPassword").value = "";
+  message.textContent = "Account created successfully.";
 }
 
-function updateStats(){
- document.getElementById("completed").textContent=
-  DB.completed.length+" / "+DB.missions.length;
- document.getElementById("score").textContent=DB.score;
- document.getElementById("eventCount").textContent=DB.events.length;
+function renderUsers(){
+  const tbody = document.getElementById("userTable");
+  tbody.innerHTML = "";
+
+  users.forEach(user=>{
+    const tr = document.createElement("tr");
+
+    const roleClass = user.role==="superadmin" ?
+      "superadmin" : user.role==="admin" ? "admin" : "";
+
+    const canDelete =
+      currentUser.role==="superadmin" ||
+      (currentUser.role==="admin" && user.role==="user");
+
+    const action = canDelete && user.id !== currentUser.id
+      ? `<button class="danger" data-delete="${user.id}">Delete</button>`
+      : `<span class="muted">Protected</span>`;
+
+    tr.innerHTML = `
+      <td>${escapeHTML(user.id)}</td>
+      <td>${escapeHTML(user.username)}</td>
+      <td><span class="tag ${roleClass}">${escapeHTML(user.role)}</span></td>
+      <td>${action}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  tbody.querySelectorAll("[data-delete]").forEach(button=>{
+    button.addEventListener("click",()=>{
+      deleteAccount(Number(button.dataset.delete));
+    });
+  });
 }
 
-function clearLogs(){
- DB.events=[];
- renderLogs();
- updateStats();
+function deleteAccount(id){
+  const target = users.find(u=>u.id===id);
+  if(!target || !currentUser) return;
+
+  if(target.id===currentUser.id){
+    alert("You cannot delete your active account.");
+    return;
+  }
+
+  if(currentUser.role==="admin" && target.role!=="user"){
+    alert("Admins can only delete User accounts.");
+    return;
+  }
+
+  if(currentUser.role!=="admin" &&
+     currentUser.role!=="superadmin") return;
+
+  if(!confirm("Delete account: "+target.username+"?")) return;
+
+  users = users.filter(u=>u.id!==id);
+  saveUsers();
+  renderDashboard();
+  renderUsers();
 }
 
-function resetLab(){
- if(!confirm("Reset all training progress?"))return;
- DB.completed=[];
- DB.score=0;
- DB.events=[];
- activeUser=null;
- document.getElementById("loginScreen").classList.remove("hidden");
- document.getElementById("loginUser").value="";
- document.getElementById("loginPass").value="";
- document.getElementById("currentUser").textContent="GUEST";
- logEvent("Lab reset");
- updateStats();
- renderMissions();
- renderDatabase();
-}
-
-updateStats();
-renderMissions();
-renderDatabase();
-renderLogs();
+// Persist the initial training accounts.
+saveUsers();
 </script>
 </body>
 </html>
