@@ -1,434 +1,720 @@
 
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BLACKBOX V2</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07110d">
+<title>BLACKBOX | Training Lab</title>
 <style>
-:root {
-  --bg:#080d16; --panel:#111b2b; --line:#26364c;
-  --blue:#3b82f6; --green:#22c55e; --text:#e5edf8;
-  --muted:#91a2ba; --red:#ef4444;
+:root{
+  color-scheme:dark;
+  --bg:#07110d;
+  --panel:#0d1b14;
+  --panel2:#10251a;
+  --line:#1d3b2a;
+  --green:#38d879;
+  --muted:#91a99a;
+  --text:#e8f5ec;
+  --red:#ff6b6b;
+  --yellow:#ffd166;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Arial,sans-serif;min-height:100vh;
+  margin:0;
+  background:radial-gradient(circle at 80% 0,#123321 0,transparent 35%),var(--bg);
+  color:var(--text);
+  font:15px/1.7 system-ui,Tahoma,Arial
 }
 button,input,select{font:inherit}
 button{
-  cursor:pointer;border:0;border-radius:8px;padding:11px 15px;
-  background:var(--blue);color:white;font-weight:bold;
+  cursor:pointer;
+  border:1px solid var(--line);
+  background:#153322;
+  color:var(--text);
+  padding:10px 15px;
+  border-radius:10px
 }
-button:hover{filter:brightness(1.15)}
+button:hover{border-color:var(--green);filter:brightness(1.12)}
+button.primary{
+  background:var(--green);
+  color:#052010;
+  border-color:var(--green);
+  font-weight:800
+}
+button.danger{
+  background:#351a1d;
+  border-color:#693039;
+  color:#ffb8bd
+}
+button:disabled{opacity:.45;cursor:not-allowed}
 input,select{
-  width:100%;padding:12px;margin:7px 0 14px;
-  background:#080f1c;color:white;border:1px solid var(--line);
-  border-radius:8px;outline:none;
+  width:100%;
+  background:#07140d;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:11px;
+  color:var(--text);
+  outline:none
 }
-input:focus,select:focus{border-color:var(--blue)}
-label{font-size:13px;color:var(--muted)}
-h1,h2,h3{margin-top:0}
-small,.muted{color:var(--muted)}
+input:focus,select:focus{border-color:var(--green)}
+.wrap{max-width:1100px;margin:auto;padding:22px}
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  border-bottom:1px solid var(--line);
+  padding-bottom:16px;
+  margin-bottom:22px
+}
+.brand{
+  font-weight:900;
+  letter-spacing:2px;
+  color:var(--green);
+  font-size:22px
+}
+.muted{color:var(--muted)}
 .hidden{display:none!important}
-.container{width:min(1100px,94%);margin:auto}
-header{
-  border-bottom:1px solid var(--line);padding:18px 0;
-  display:flex;justify-content:space-between;align-items:center;
+.login{
+  max-width:430px;
+  margin:8vh auto;
+  background:#0b1911;
+  border:1px solid var(--line);
+  padding:26px;
+  border-radius:18px;
+  box-shadow:0 20px 80px #0008
 }
-.logo{font-weight:900;letter-spacing:4px;color:var(--blue)}
+.login h1{margin:0;color:var(--green);letter-spacing:3px}
+.field{margin:14px 0}
+.field label{
+  display:block;
+  margin-bottom:6px;
+  color:#b8d0c0
+}
+.error{color:var(--red);min-height:26px}
+.success{color:var(--green)}
+.nav{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:18px
+}
+.nav button.active{
+  background:var(--green);
+  color:#062012;
+  border-color:var(--green);
+  font-weight:800
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:14px
+}
 .card{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:13px;padding:20px;margin:15px 0;
+  background:linear-gradient(145deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:18px
 }
-.login-wrap{max-width:390px;margin:10vh auto}
-.login-wrap .card{padding:28px}
-.btn-row{display:flex;gap:8px;flex-wrap:wrap}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.stat{background:#0c1523;border:1px solid var(--line);padding:17px;border-radius:10px}
-.stat strong{font-size:25px;display:block;margin-top:8px}
-.nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
-.nav button{background:#18263a}
-.nav button.active{background:var(--blue)}
-.green-panel{
-  border:1px solid #168344;background:#0c2419;
-  border-radius:13px;padding:20px;margin:15px 0;
+.card h3{margin:0 0 8px}
+.metric{
+  font-size:30px;
+  color:var(--green);
+  font-weight:900
 }
-.green-panel h2{color:#4ade80}
-.green-btn{background:#15803d}
-.danger{background:#991b1b}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--line)}
-th{color:var(--muted)}
-.table-wrap{overflow-x:auto}
-.tag{
-  display:inline-block;padding:5px 9px;border-radius:20px;
-  background:#1c2d43;font-size:11px
+.section{margin-top:18px}
+.row{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap
 }
-.tag.admin{background:#392b12;color:#facc15}
-.tag.superadmin{background:#123b2a;color:#4ade80}
-.message{min-height:20px;color:#fca5a5;font-size:13px}
-footer{text-align:center;color:var(--muted);padding:35px 0;font-size:12px}
+.row>*{flex:1}
+.table-wrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:12px
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:600px
+}
+th,td{
+  text-align:right;
+  padding:11px 13px;
+  border-bottom:1px solid var(--line)
+}
+th{color:var(--green);background:#10251a}
+tr:last-child td{border-bottom:0}
+.pill{
+  display:inline-block;
+  padding:2px 9px;
+  border:1px solid var(--line);
+  border-radius:30px;
+  color:var(--green);
+  font-size:12px
+}
+.notice{
+  background:#14261b;
+  border-right:3px solid var(--yellow);
+  padding:12px 14px;
+  border-radius:8px;
+  color:#d8e6dc
+}
+.small{font-size:13px}
+@media(max-width:600px){
+  .wrap{padding:14px}
+  .top{align-items:flex-start;flex-direction:column}
+  .login{margin:5vh 10px;padding:20px}
+}
 </style>
 </head>
+
 <body>
+<div class="wrap">
 
-<div id="loginScreen" class="login-wrap">
-  <div class="card">
-    <div class="logo">BLACKBOX</div>
-    <p class="muted">V2 / ACCESS CONTROL LAB</p>
-    <h2>Authentication</h2>
-    <label>USERNAME</label>
-    <input id="loginUser" autocomplete="username" placeholder="Enter username">
-    <label>PASSWORD</label>
-    <input id="loginPass" type="password" autocomplete="current-password" placeholder="Enter password">
-    <button style="width:100%" onclick="login()">AUTHENTICATE</button>
-    <p id="loginMessage" class="message"></p>
-    <small>Educational client-side simulator</small>
+<header class="top">
+  <div>
+    <div class="brand">BLACKBOX <span class="muted">/ LAB</span></div>
+    <div class="muted small">محیط آموزشی شبیه‌سازی امنیت</div>
   </div>
-</div>
+  <div id="who" class="muted small"></div>
+</header>
 
-<div id="app" class="hidden">
-  <header class="container">
-    <div>
-      <div class="logo">BLACKBOX V2</div>
-      <small>SECURITY TRAINING ENVIRONMENT</small>
-    </div>
-    <div class="btn-row">
-      <span id="identity" class="muted"></span>
-      <button class="danger" onclick="logout()">Logout</button>
-    </div>
-  </header>
+<section id="loginView" class="login">
+  <h1>BLACKBOX</h1>
+  <p class="muted">ورود به محیط آزمایشگاه</p>
 
-  <main class="container">
+  <form id="loginForm">
+    <div class="field">
+      <label for="loginUser">نام کاربری</label>
+      <input id="loginUser" autocomplete="username" required>
+    </div>
+
+    <div class="field">
+      <label for="loginPass">رمز عبور</label>
+      <input id="loginPass" type="password"
+             autocomplete="current-password" required>
+    </div>
+
+    <button class="primary" type="submit" style="width:100%">
+      ورود به پنل
+    </button>
+
+    <div id="loginError" class="error small" role="alert"></div>
+  </form>
+
+  <p class="muted small">
+    این پروژه یک شبیه‌ساز سمت مرورگر است؛
+    ورود و داده‌ها بک‌اند واقعی ندارند.
+  </p>
+</section>
+
+<main id="appView" class="hidden">
+
+  <nav class="nav">
+    <button class="active" data-page="dashboard">داشبورد</button>
+    <button data-page="users" id="usersNav" class="hidden">
+      مدیریت کاربران
+    </button>
+    <button data-page="missions">تمرین‌ها</button>
+    <button data-page="about">درباره آزمایشگاه</button>
+    <button id="logoutBtn">خروج</button>
+  </nav>
+
+  <section id="dashboardPage">
+    <h2>داشبورد</h2>
+
+    <div class="grid">
+      <div class="card">
+        <div class="muted">کاربران ثبت‌شده</div>
+        <div class="metric" id="userCount">0</div>
+      </div>
+
+      <div class="card">
+        <div class="muted">نقش حساب فعلی</div>
+        <div class="metric" id="roleMetric">USER</div>
+      </div>
+
+      <div class="card">
+        <div class="muted">وضعیت آزمایشگاه</div>
+        <div class="metric">READY</div>
+      </div>
+    </div>
+
+    <div class="card section">
+      <h3>وضعیت محیط</h3>
+      <p class="muted">
+        این داشبورد برای تمرین تحلیل کد، احراز هویت و کنترل دسترسی
+        طراحی شده است. تمام عملیات در همین مرورگر انجام می‌شود.
+      </p>
+    </div>
+  </section>
+
+  <section id="usersPage" class="hidden">
+    <h2>مدیریت کاربران</h2>
+
+    <div class="notice small">
+      ساخت حساب فقط برای مدیرکل فعال است.
+      مدیر عادی امکان ساخت یا حذف حساب ندارد.
+    </div>
+
+    <div class="card section">
+      <h3>افزودن حساب جدید</h3>
+
+      <form id="createUserForm">
+        <div class="grid">
+
+          <div class="field">
+            <label for="newUsername">نام کاربری</label>
+            <input id="newUsername" minlength="3"
+                   maxlength="24" required>
+          </div>
+
+          <div class="field">
+            <label for="newPassword">رمز عبور</label>
+            <input id="newPassword" minlength="6" required>
+          </div>
+
+          <div class="field">
+            <label for="newRole">نقش</label>
+            <select id="newRole">
+              <option value="user">کاربر</option>
+              <option value="admin">ادمین</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <button class="primary" type="submit">ایجاد حساب</button>
+          <span id="createMessage" class="small muted"></span>
+        </div>
+      </form>
+    </div>
+
+    <div class="section">
+      <h3>فهرست حساب‌ها</h3>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>نام کاربری</th>
+              <th>نقش</th>
+              <th>شناسه</th>
+              <th>عملیات</th>
+            </tr>
+          </thead>
+          <tbody id="usersTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="missionsPage" class="hidden">
+    <h2>تمرین‌های آموزشی</h2>
+
+    <div class="grid">
+      <article class="card">
+        <h3>01 / Source Review</h3>
+        <p class="muted">
+          بررسی کد سمت کاربر و پیدا کردن داده‌هایی که نباید عمومی باشند.
+        </p>
+        <span class="pill">Code Analysis</span>
+      </article>
+
+      <article class="card">
+        <h3>02 / Authentication</h3>
+        <p class="muted">
+          تفاوت احراز هویت واقعی با بررسی رمز عبور در JavaScript را تحلیل کن.
+        </p>
+        <span class="pill">Auth Concepts</span>
+      </article>
+
+      <article class="card">
+        <h3>03 / Access Control</h3>
+        <p class="muted">
+          بررسی کن چرا مخفی‌کردن یک دکمه، جایگزین کنترل دسترسی سمت سرور نیست.
+        </p>
+        <span class="pill">Authorization</span>
+      </article>
+
+      <article class="card">
+        <h3>04 / Input Validation</h3>
+        <p class="muted">
+          ورودی نام کاربری را با محدودیت طول و کاراکترهای مجاز ارزیابی کن.
+        </p>
+        <span class="pill">Validation</span>
+      </article>
+    </div>
+  </section>
+
+  <section id="aboutPage" class="hidden">
+    <h2>درباره BLACKBOX</h2>
+
     <div class="card">
-      <h2 id="welcome">Dashboard</h2>
-      <p class="muted">Welcome to the BLACKBOX training environment.</p>
-      <div class="stats">
-        <div class="stat">TOTAL USERS<strong id="totalUsers">0</strong></div>
-        <div class="stat">ADMINS<strong id="totalAdmins">0</strong></div>
-        <div class="stat">YOUR ROLE<strong id="myRole">USER</strong></div>
-      </div>
+      <p>
+        BLACKBOX یک پروژه کوچک آموزشی برای تمرین مفاهیم پایه امنیت وب است.
+      </p>
+
+      <p class="muted">
+        GitHub Pages فقط فایل‌های استاتیک را میزبانی می‌کند.
+        بنابراین این نسخه دیتابیس سروری، API واقعی یا احراز هویت امن ندارد.
+        اطلاعات کاربران در localStorage مرورگر ذخیره می‌شود و پاک‌کردن
+        داده‌های سایت آن‌ها را حذف می‌کند.
+      </p>
+
+      <p class="notice small">
+        برای حساب‌های واقعی یا اطلاعات حساس از این نسخه استفاده نکن.
+        کد HTML و JavaScript برای بازدیدکنندگان قابل مشاهده است.
+      </p>
     </div>
+  </section>
 
-    <div class="nav">
-      <button class="active" onclick="showTab('home',this)">Dashboard</button>
-      <button onclick="showTab('missions',this)">Missions</button>
-      <button id="managementNav" class="hidden" onclick="showTab('management',this)">User Management</button>
-    </div>
-
-    <section id="homeTab">
-      <div class="card">
-        <h2>System Overview</h2>
-        <p class="muted">BLACKBOX is running in local simulation mode.</p>
-        <p>Current session: <strong id="sessionRole"></strong></p>
-        <p>Access level: <strong id="accessLevel"></strong></p>
-      </div>
-      <div class="card">
-        <h3>Security Notice</h3>
-        <p class="muted">This application stores accounts in browser storage. It is not a production authentication system.</p>
-      </div>
-    </section>
-
-    <section id="missionsTab" class="hidden">
-      <div class="card">
-        <h2>Training Missions</h2>
-        <div class="card">
-          <h3>01 — Source Code Analysis</h3>
-          <p class="muted">Understand what information is exposed in client-side code.</p>
-          <span class="tag">BEGINNER</span>
-        </div>
-        <div class="card">
-          <h3>02 — Authentication Review</h3>
-          <p class="muted">Study how a browser-based login simulation works.</p>
-          <span class="tag">BEGINNER</span>
-        </div>
-        <div class="card">
-          <h3>03 — Access Control</h3>
-          <p class="muted">Understand the difference between User, Admin and Super Admin.</p>
-          <span class="tag">INTERMEDIATE</span>
-        </div>
-      </div>
-    </section>
-
-    <section id="managementTab" class="hidden">
-      <div class="green-panel">
-        <h2>USER MANAGEMENT CENTER</h2>
-        <p class="muted">Create accounts and manage access levels.</p>
-
-        <label>USERNAME</label>
-        <input id="newUsername" placeholder="New username">
-
-        <label>PASSWORD</label>
-        <input id="newPassword" type="password" placeholder="New password">
-
-        <label>ACCOUNT ROLE</label>
-        <select id="newRole">
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-          <option value="superadmin" id="superOption">Super Admin</option>
-        </select>
-
-        <button class="green-btn" onclick="createAccount()">+ CREATE ACCOUNT</button>
-        <p id="createMessage" class="message"></p>
-      </div>
-
-      <div class="card">
-        <h2>Account Directory</h2>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>ID</th><th>USERNAME</th><th>ROLE</th><th>ACTION</th></tr>
-            </thead>
-            <tbody id="userTable"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  </main>
-  <footer>BLACKBOX V2 · EDUCATIONAL SIMULATOR · NO REAL BACKEND</footer>
+</main>
 </div>
 
 <script>
+'use strict';
+
 /*
-  BLACKBOX V2
-  IMPORTANT:
-  This is a client-side learning simulation.
-  Never use these credentials or this access-control model
-  for a real website.
-*/
+ * BLACKBOX V2
+ * Static educational demo only.
+ * Browser storage is NOT a secure database.
+ */
 
-// Initial Super Admin account for the training lab.
-// These values are intentionally stored in client-side code.
-const ROOT_ACCOUNT = {
-  username: "nexus-chief-01",
-  password: "BBX-V2_ROOT!9x-K7",
-  role: "superadmin"
-};
+const STORAGE_KEY = 'blackbox_v2_users';
 
-const STORAGE_KEY = "blackbox_v2_users";
+const ROOT_ACCOUNT = Object.freeze({
+  id: 'root-blackbox',
+  username: 'nexus-chief-01',
+  password: 'BBX-V2_ROOT!9x-K7',
+  role: 'superadmin'
+});
 
-function loadUsers(){
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if(saved){
-      const parsed = JSON.parse(saved);
-      if(Array.isArray(parsed)) return parsed;
-    }
-  } catch(e){}
-  return [
-    {id:1,username:"analyst",password:"bluebox-2026",role:"user"},
-    {id:2,username:"operator",password:"operator-demo",role:"admin"},
-    {...ROOT_ACCOUNT,id:3}
-  ];
-}
-
-let users = loadUsers();
+let users = [];
 let currentUser = null;
 
-function saveUsers(){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(users));
+const $ = (id) => document.getElementById(id);
+
+function makeId() {
+  return 'u-' + Date.now().toString(36) + '-' +
+    Math.random().toString(36).slice(2, 7);
 }
 
-function escapeHTML(value){
-  return String(value).replace(/[&<>"']/g,char=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",
-    '"':"&quot;","'":"&#39;"
-  }[char]));
+function readStoredUsers() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+
+    if (!raw) return [];
+
+    const parsed = JSON.parse(raw);
+
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed.filter(u =>
+      u &&
+      typeof u === 'object' &&
+      typeof u.username === 'string' &&
+      typeof u.password === 'string' &&
+      ['user', 'admin', 'superadmin'].includes(u.role)
+    );
+
+  } catch (error) {
+    console.warn('Could not read saved users:', error);
+    return [];
+  }
 }
 
-function login(){
-  const username = document.getElementById("loginUser").value.trim();
-  const password = document.getElementById("loginPass").value;
+function saveUsers() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+    return true;
+  } catch (error) {
+    console.error('Could not save users:', error);
+    return false;
+  }
+}
 
-  const account = users.find(u =>
-    u.username === username && u.password === password
+function loadUsers() {
+
+  users = readStoredUsers();
+
+  // Restore or repair the built-in Super Admin account.
+  const rootIndex = users.findIndex(
+    u => u.username === ROOT_ACCOUNT.username
   );
 
-  if(!account){
-    document.getElementById("loginMessage").textContent =
-      "Invalid username or password.";
-    return;
+  if (rootIndex === -1) {
+    users.unshift({ ...ROOT_ACCOUNT });
+  } else {
+    users[rootIndex] = {
+      ...users[rootIndex],
+      ...ROOT_ACCOUNT
+    };
   }
 
-  currentUser = account;
-  document.getElementById("loginScreen").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
-  renderDashboard();
-}
+  // Remove duplicate usernames.
+  const seen = new Set();
 
-function logout(){
-  currentUser = null;
-  document.getElementById("app").classList.add("hidden");
-  document.getElementById("loginScreen").classList.remove("hidden");
-  document.getElementById("loginPass").value = "";
-  document.getElementById("loginMessage").textContent = "";
-}
+  users = users.filter(u => {
+    const key = u.username.toLowerCase();
 
-function renderDashboard(){
-  if(!currentUser) return;
+    if (seen.has(key)) return false;
 
-  document.getElementById("identity").textContent =
-    currentUser.username;
-  document.getElementById("welcome").textContent =
-    "Welcome, " + currentUser.username;
-  document.getElementById("myRole").textContent =
-    currentUser.role.toUpperCase();
-  document.getElementById("sessionRole").textContent =
-    currentUser.role.toUpperCase();
-
-  const access = {
-    user:"Standard access",
-    admin:"User management",
-    superadmin:"Full lab management"
-  };
-  document.getElementById("accessLevel").textContent =
-    access[currentUser.role] || "Unknown";
-
-  document.getElementById("totalUsers").textContent = users.length;
-  document.getElementById("totalAdmins").textContent =
-    users.filter(u=>u.role==="admin" || u.role==="superadmin").length;
-
-  const canManage = currentUser.role === "admin" ||
-                    currentUser.role === "superadmin";
-
-  document.getElementById("managementNav")
-    .classList.toggle("hidden",!canManage);
-
-  // Only Super Admin can create or assign Super Admin accounts.
-  document.getElementById("superOption")
-    .disabled = currentUser.role !== "superadmin";
-
-  if(canManage) renderUsers();
-}
-
-function showTab(name,button){
-  ["home","missions","management"].forEach(tab=>{
-    document.getElementById(tab+"Tab").classList.add("hidden");
+    seen.add(key);
+    return true;
   });
 
-  if(name==="management" &&
-     currentUser.role!=="admin" &&
-     currentUser.role!=="superadmin"){
-    return;
-  }
-
-  document.getElementById(name+"Tab").classList.remove("hidden");
-
-  document.querySelectorAll(".nav button")
-    .forEach(btn=>btn.classList.remove("active"));
-
-  if(button) button.classList.add("active");
-  if(name==="management") renderUsers();
+  saveUsers();
 }
 
-function createAccount(){
-  const username = document.getElementById("newUsername").value.trim();
-  const password = document.getElementById("newPassword").value;
-  const role = document.getElementById("newRole").value;
-  const message = document.getElementById("createMessage");
+function showLogin() {
+  $('loginView').classList.remove('hidden');
+  $('appView').classList.add('hidden');
+  $('who').textContent = '';
+  currentUser = null;
+}
 
-  if(!username || !password){
-    message.textContent = "Username and password are required.";
+function showApp() {
+  $('loginView').classList.add('hidden');
+  $('appView').classList.remove('hidden');
+
+  $('who').textContent =
+    currentUser.username + ' | ' + roleName(currentUser.role);
+
+  $('usersNav').classList.toggle(
+    'hidden',
+    currentUser.role !== 'superadmin'
+  );
+
+  $('roleMetric').textContent = currentUser.role.toUpperCase();
+  $('userCount').textContent = String(users.length);
+
+  openPage('dashboard');
+}
+
+function roleName(role) {
+  return {
+    user: 'کاربر',
+    admin: 'ادمین',
+    superadmin: 'مدیرکل'
+  }[role] || 'نامشخص';
+}
+
+function openPage(page) {
+
+  const allowed = [
+    'dashboard',
+    'users',
+    'missions',
+    'about'
+  ];
+
+  if (!allowed.includes(page)) {
+    page = 'dashboard';
+  }
+
+  if (
+    page === 'users' &&
+    currentUser?.role !== 'superadmin'
+  ) {
+    page = 'dashboard';
+  }
+
+  allowed.forEach(name => {
+    $(name + 'Page').classList.toggle(
+      'hidden',
+      name !== page
+    );
+  });
+
+  document.querySelectorAll('[data-page]').forEach(button => {
+    button.classList.toggle(
+      'active',
+      button.dataset.page === page
+    );
+  });
+
+  if (page === 'users') {
+    renderUsers();
+  }
+
+  if (page === 'dashboard') {
+    $('userCount').textContent = String(users.length);
+  }
+}
+
+function renderUsers() {
+
+  const tbody = $('usersTable');
+
+  tbody.replaceChildren();
+
+  users.forEach(user => {
+
+    const tr = document.createElement('tr');
+
+    const name = document.createElement('td');
+    const role = document.createElement('td');
+    const id = document.createElement('td');
+    const actions = document.createElement('td');
+
+    name.textContent = user.username;
+    role.textContent = roleName(user.role);
+    id.textContent = user.id || '—';
+
+    if (user.username === ROOT_ACCOUNT.username) {
+
+      const protectedTag = document.createElement('span');
+
+      protectedTag.className = 'pill';
+      protectedTag.textContent = 'حساب اصلی';
+
+      actions.append(protectedTag);
+
+    } else {
+
+      const del = document.createElement('button');
+
+      del.className = 'danger';
+      del.type = 'button';
+      del.textContent = 'حذف';
+
+      del.addEventListener('click', () => {
+        deleteUser(user.username);
+      });
+
+      actions.append(del);
+    }
+
+    tr.append(name, role, id, actions);
+    tbody.append(tr);
+  });
+}
+
+function deleteUser(username) {
+
+  if (currentUser?.role !== 'superadmin') return;
+
+  if (username === ROOT_ACCOUNT.username) return;
+
+  if (!confirm('حساب «' + username + '» حذف شود؟')) {
     return;
   }
 
-  if(username.length < 3 || password.length < 6){
-    message.textContent = "Username needs 3+ characters; password needs 6+.";
+  users = users.filter(u => u.username !== username);
+
+  saveUsers();
+  renderUsers();
+
+  $('userCount').textContent = String(users.length);
+}
+
+$('loginForm').addEventListener('submit', event => {
+
+  event.preventDefault();
+
+  const username = $('loginUser').value.trim();
+  const password = $('loginPass').value;
+
+  const found = users.find(u =>
+    u.username === username &&
+    u.password === password
+  );
+
+  if (!found) {
+    $('loginError').textContent =
+      'نام کاربری یا رمز عبور اشتباه است.';
     return;
   }
 
-  if(users.some(u=>u.username.toLowerCase()===username.toLowerCase())){
-    message.textContent = "This username already exists.";
+  $('loginError').textContent = '';
+
+  currentUser = found;
+
+  $('loginPass').value = '';
+
+  showApp();
+});
+
+$('createUserForm').addEventListener('submit', event => {
+
+  event.preventDefault();
+
+  $('createMessage').textContent = '';
+
+  if (currentUser?.role !== 'superadmin') {
+    $('createMessage').textContent =
+      'اجازه انجام این کار را نداری.';
     return;
   }
 
-  if(role==="superadmin" && currentUser.role!=="superadmin"){
-    message.textContent = "Only Super Admin can create Super Admin accounts.";
+  const username = $('newUsername').value.trim();
+  const password = $('newPassword').value;
+  const role = $('newRole').value;
+
+  if (!/^[a-zA-Z0-9_-]{3,24}$/.test(username)) {
+    $('createMessage').textContent =
+      'نام کاربری: ۳ تا ۲۴ کاراکتر انگلیسی، عدد، _ یا -';
     return;
   }
 
-  if(currentUser.role==="admin" && role!=="user"){
-    message.textContent = "Admins can create User accounts only.";
+  if (password.length < 6) {
+    $('createMessage').textContent =
+      'رمز عبور باید حداقل ۶ کاراکتر باشد.';
+    return;
+  }
+
+  if (
+    users.some(u =>
+      u.username.toLowerCase() === username.toLowerCase()
+    )
+  ) {
+    $('createMessage').textContent =
+      'این نام کاربری قبلاً ثبت شده است.';
     return;
   }
 
   users.push({
-    id:Math.max(0,...users.map(u=>Number(u.id)||0))+1,
-    username,password,role
+    id: makeId(),
+    username,
+    password,
+    role
   });
 
-  saveUsers();
-  renderDashboard();
-  renderUsers();
+  const saved = saveUsers();
 
-  document.getElementById("newUsername").value = "";
-  document.getElementById("newPassword").value = "";
-  message.textContent = "Account created successfully.";
-}
+  $('createMessage').textContent = saved
+    ? 'حساب با موفقیت ساخته شد.'
+    : 'ذخیره‌سازی مرورگر ناموفق بود.';
 
-function renderUsers(){
-  const tbody = document.getElementById("userTable");
-  tbody.innerHTML = "";
+  $('createMessage').className = saved
+    ? 'small success'
+    : 'small error';
 
-  users.forEach(user=>{
-    const tr = document.createElement("tr");
-
-    const roleClass = user.role==="superadmin" ?
-      "superadmin" : user.role==="admin" ? "admin" : "";
-
-    const canDelete =
-      currentUser.role==="superadmin" ||
-      (currentUser.role==="admin" && user.role==="user");
-
-    const action = canDelete && user.id !== currentUser.id
-      ? `<button class="danger" data-delete="${user.id}">Delete</button>`
-      : `<span class="muted">Protected</span>`;
-
-    tr.innerHTML = `
-      <td>${escapeHTML(user.id)}</td>
-      <td>${escapeHTML(user.username)}</td>
-      <td><span class="tag ${roleClass}">${escapeHTML(user.role)}</span></td>
-      <td>${action}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  tbody.querySelectorAll("[data-delete]").forEach(button=>{
-    button.addEventListener("click",()=>{
-      deleteAccount(Number(button.dataset.delete));
-    });
-  });
-}
-
-function deleteAccount(id){
-  const target = users.find(u=>u.id===id);
-  if(!target || !currentUser) return;
-
-  if(target.id===currentUser.id){
-    alert("You cannot delete your active account.");
-    return;
+  if (saved) {
+    $('createUserForm').reset();
+    renderUsers();
+    $('userCount').textContent = String(users.length);
   }
+});
 
-  if(currentUser.role==="admin" && target.role!=="user"){
-    alert("Admins can only delete User accounts.");
-    return;
-  }
+document.querySelectorAll('[data-page]').forEach(button => {
+  button.addEventListener('click', () => {
+    openPage(button.dataset.page);
+  });
+});
 
-  if(currentUser.role!=="admin" &&
-     currentUser.role!=="superadmin") return;
+$('logoutBtn').addEventListener('click', showLogin);
 
-  if(!confirm("Delete account: "+target.username+"?")) return;
+// Initialize before accepting any login attempt.
+loadUsers();
+showLogin();
 
-  users = users.filter(u=>u.id!==id);
-  saveUsers();
-  renderDashboard();
-  renderUsers();
-}
-
-// Persist the initial training accounts.
-saveUsers();
 </script>
 </body>
 </html>
