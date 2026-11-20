@@ -1,40 +1,270 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kian Kheiri</title>
-    <!-- اتصال به فایل CSS خارجی -->
-    <link rel="stylesheet" href="./style.css" type="text/css" media="all" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLACKBOX | Mini Lab</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: monospace;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #0d1117;
+    color: #dce6f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 440px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 0 35px #0008;
+}
+
+h1 {
+    color: #3b82f6;
+    letter-spacing: 5px;
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    color: #8b949e;
+    font-size: 12px;
+    margin-bottom: 28px;
+}
+
+.status {
+    color: #3fb950;
+    font-size: 12px;
+    margin-bottom: 22px;
+}
+
+label {
+    display: block;
+    margin: 15px 0 7px;
+    color: #8b949e;
+    font-size: 12px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    color: white;
+    outline: none;
+}
+
+input:focus {
+    border-color: #3b82f6;
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 22px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+#message {
+    margin-top: 18px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.panel {
+    display: none;
+}
+
+.info {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    padding: 14px;
+    margin-top: 12px;
+    border-radius: 6px;
+    line-height: 2;
+    font-size: 13px;
+}
+
+.green {
+    color: #3fb950;
+}
+
+.blue {
+    color: #58a6ff;
+}
+
+.logs {
+    margin-top: 22px;
+    color: #8b949e;
+    font-size: 11px;
+    line-height: 2;
+    max-height: 100px;
+    overflow: auto;
+}
+</style>
 </head>
+
 <body>
-    <header>
-        <nav id="glass-navbar">
-            <div class="brand">
-                <div class="logo-icon">K</div>
-                <span class="brand-name">Kian Kheiri</span>
-            </div>
 
-            <ul class="nav-links">
-                <li><a href="#" class="active">Home</a></li>
-                <li><a href="#">Projects</a></li>
-                <li><a href="#">Articles</a></li>
-                <li><a href="#">Shop</a></li>
-                <li><a href="#">About</a></li>
-            </ul>
+<div class="container">
 
-            <div>
-                <button class="icon-btn" aria-label="Search">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </button>
-            </div>
-        </nav>
-    </header>
+    <h1>BLACKBOX</h1>
+    <div class="subtitle">MINI PENETRATION TEST LAB v1.0</div>
 
-    <h1 style="color: white; margin: 10px;">coming soon . . . </h1>
+    <div class="status">● LAB STATUS: ONLINE</div>
+
+    <section id="login">
+
+        <div style="color:#58a6ff;font-size:13px">
+            AUTHENTICATION REQUIRED
+        </div>
+
+        <label>USERNAME</label>
+        <input id="username" autocomplete="off"
+               placeholder="Enter username">
+
+        <label>PASSWORD</label>
+        <input id="password" type="password"
+               placeholder="Enter password">
+
+        <button onclick="authenticate()">AUTHENTICATE</button>
+
+        <div id="message"></div>
+
+    </section>
+
+    <section class="panel" id="dashboard">
+
+        <h2 class="green">ACCESS GRANTED</h2>
+
+        <div class="info">
+            <div>SERVER: <span class="green">ONLINE</span></div>
+            <div>ACCESS: <span class="blue">ADMIN</span></div>
+            <div>SESSION: <span id="session"></span></div>
+            <div>STATUS: AUTHENTICATED</div>
+        </div>
+
+        <div class="info">
+            <strong class="blue">SECRET MESSAGE</strong>
+            <p>Welcome to BLACKBOX.</p>
+            <p>There is always more beneath the surface.</p>
+            <p>Flag: <span class="green">BLACKBOX{FIRST_ACCESS}</span></p>
+        </div>
+
+        <button onclick="location.reload()">NEW SESSION</button>
+
+    </section>
+
+    <div class="logs" id="logs">
+        [SYSTEM] BLACKBOX initialized
+    </div>
+
+</div>
+
+<script>
+
+// =================================
+// BLACKBOX JSON DATABASE
+// =================================
+
+const words = [
+    "shadow", "matrix", "cipher",
+    "phantom", "kernel", "vector"
+];
+
+function randomItem(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function randomNumber() {
+    return Math.floor(100 + Math.random() * 900);
+}
+
+const database = {
+    users: [
+        {
+            username: randomItem(words) + randomNumber(),
+            password:
+                randomItem(words) +
+                "!" +
+                randomNumber()
+        }
+    ]
+};
+
+// =================================
+// SESSION
+// =================================
+
+const sessionID = Math.random()
+    .toString(36)
+    .substring(2, 10)
+    .toUpperCase();
+
+function log(text) {
+    const logs = document.getElementById("logs");
+    logs.innerHTML += "<br>[LOG] " + text;
+}
+
+// =================================
+// AUTHENTICATION SIMULATOR
+// =================================
+
+function authenticate() {
+
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+
+    const account = database.users[0];
+
+    if (
+        user === account.username &&
+        pass === account.password
+    ) {
+
+        document.getElementById("login").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        document.getElementById("session").textContent = sessionID;
+
+        log("Authentication successful");
+        log("Admin dashboard opened");
+
+    } else {
+
+        document.getElementById("message").style.color = "#f85149";
+        document.getElementById("message").textContent =
+            "ACCESS DENIED";
+
+        log("Failed authentication attempt");
+
+    }
+}
+
+</script>
 
 </body>
 </html>
